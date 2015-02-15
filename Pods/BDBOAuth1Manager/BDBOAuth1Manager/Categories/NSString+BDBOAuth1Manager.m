@@ -1,7 +1,7 @@
 //
 //  NSString+BDBOAuth1Manager.m
 //
-//  Copyright (c) 2014 Bradley David Bergeron
+//  Copyright (c) 2013-2014 Bradley David Bergeron
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
@@ -28,8 +28,8 @@
 #pragma mark -
 @implementation NSString (BDBOAuth1Manager)
 
-- (NSString *)URLEncode
-{
+#pragma mark URL Encoding/Decoding
+- (NSString *)bdb_URLEncode {
     return (__bridge_transfer NSString *)
     CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                             (__bridge CFStringRef)self,
@@ -38,8 +38,7 @@
                                             kCFStringEncodingUTF8);
 }
 
-- (NSString *)URLDecode
-{
+- (NSString *)bdb_URLDecode {
     return (__bridge_transfer NSString *)
     CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
                                                             (__bridge CFStringRef)self,

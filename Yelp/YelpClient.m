@@ -14,7 +14,7 @@
     NSURL *baseURL = [NSURL URLWithString:@"http://api.yelp.com/v2/"];
     self = [super initWithBaseURL:baseURL consumerKey:consumerKey consumerSecret:consumerSecret];
     if (self) {
-        BDBOAuthToken *token = [BDBOAuthToken tokenWithToken:accessToken secret:accessSecret expiration:nil];
+        BDBOAuth1Credential *token = [BDBOAuth1Credential credentialWithToken:accessToken secret:accessSecret expiration:nil];
         [self.requestSerializer saveAccessToken:token];
     }
     return self;
