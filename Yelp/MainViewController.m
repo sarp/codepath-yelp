@@ -82,21 +82,21 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     NSLog(@"Search bar button clicked: %@", searchBar.text);
-    [searchBar resignFirstResponder];
+    [searchBar endEditing:YES];
 }
 
 #pragma mark - Private methods
 
 - (void) fetchBusinessesWithQuery:(NSString *)query params:(NSDictionary *)params {
-
-     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
-//     NSLog(@"response: %@", response);
+    
+    [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
+     NSLog(@"response: %@", response);
      NSArray *businessesDictionaries = response[@"businesses"];
      self.businesses = [Business businessesWithDictionaries:businessesDictionaries];
      
      [self.tableView reloadData];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//     NSLog(@"error: %@", [error description]);
+     NSLog(@"error: %@", [error description]);
      }];
 }
 

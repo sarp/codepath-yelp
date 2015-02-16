@@ -10,6 +10,8 @@
 #import "SwitchCell.h"
 #import "GroupCell.h"
 
+// TODO: Is there a shortcut for NSIndexSet
+
 @interface FiltersViewController () <UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -21,7 +23,7 @@
 - (void) initCategories;
 @end
 
-//  category, sort (best match, distance, highest rated), radius (meters), deals (on/off).
+
 const NSInteger kSortSection = 0;
 const NSInteger kRadiusSection = 1;
 const NSInteger kDealsSection = 2;
@@ -41,12 +43,12 @@ const NSInteger kCategorySection = 3;
                                              yelpFilterName:@"sort"
                                              yelpFilterValues:@[@"0", @"1", @"2"]],
                           [[GroupCell alloc] initWithSectionLabel:@"Deals"
-                                                        rowLabels:@[@"On", @"Off"]
+                                                        rowLabels:@[@"Off", @"On"]
                                                    yelpFilterName:@"deals_filter"
-                           yelpFilterValues:@[@"true", @""]]
+                           yelpFilterValues:@[@"", @"true"]]
                           ,
                           [[GroupCell alloc] initWithSectionLabel:@"Distance" rowLabels:@[@"Best Match", @"2 blocks", @"6 blocks", @"1 mile", @"5 miles"] yelpFilterName:@"radius_filter"
-                           yelpFilterValues:@[@"200", @"600", @"1600", @"8000"]
+                           yelpFilterValues:@[@"", @"200", @"600", @"1600", @"8000"]
                            ]
                           ];
 
@@ -85,7 +87,6 @@ const NSInteger kCategorySection = 3;
             current.selectedIndex = indexPath.row;
         }
         current.isExpanded = !current.isExpanded;
-        // TODO: Is there a shortcut for NSIndexSet
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
