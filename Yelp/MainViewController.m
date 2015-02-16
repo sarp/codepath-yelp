@@ -44,8 +44,8 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 #pragma mark - Filter delegate methods
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
+    NSLog(@"Filters: %@", filters);
     [self fetchBusinessesWithQuery:@"Restaurants" params:filters];
-    NSLog(@"fire new network event %@", filters);
 }
 
 - (void)viewDidLoad
@@ -90,13 +90,13 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 - (void) fetchBusinessesWithQuery:(NSString *)query params:(NSDictionary *)params {
 
      [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
-     NSLog(@"response: %@", response);
+//     NSLog(@"response: %@", response);
      NSArray *businessesDictionaries = response[@"businesses"];
      self.businesses = [Business businessesWithDictionaries:businessesDictionaries];
      
      [self.tableView reloadData];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-     NSLog(@"error: %@", [error description]);
+//     NSLog(@"error: %@", [error description]);
      }];
 }
 

@@ -10,7 +10,7 @@
 
 @implementation GroupCell
 
-- initWithSectionLabel:(NSString*)sectionLabel rowLabels:(NSArray*)rowLabels yelpFilterName:(NSString*)filterName {
+- initWithSectionLabel:(NSString*)sectionLabel rowLabels:(NSArray*)rowLabels yelpFilterName:(NSString*)filterName yelpFilterValues:(NSArray *)filterValues {
     self = [super init];
     if (self) {
         self.isExpanded = NO;
@@ -18,6 +18,7 @@
         self.rowLabels = rowLabels;
         self.yelpFilterName = filterName;
         self.selectedIndex = 0;
+        self.filterValues = filterValues;
     }
     return self;
 }

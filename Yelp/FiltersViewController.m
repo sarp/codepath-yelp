@@ -38,9 +38,16 @@ const NSInteger kCategorySection = 3;
         self.sections = @[
                           [[GroupCell alloc] initWithSectionLabel:@"Sort by"
                                              rowLabels:@[@"Best Match", @"Distance", @"Rating"]
-                                             yelpFilterName:@"sort"],
-                          [[GroupCell alloc] initWithSectionLabel:@"Deals" rowLabels:@[@"On", @"Off"] yelpFilterName:@"deals_filter"],
-                          [[GroupCell alloc] initWithSectionLabel:@"Distance" rowLabels:@[@"Best Match", @"2 blocks", @"6 blocks", @"1 mile", @"5 miles"] yelpFilterName:@"radius_filter"]
+                                             yelpFilterName:@"sort"
+                                             yelpFilterValues:@[@"0", @"1", @"2"]],
+                          [[GroupCell alloc] initWithSectionLabel:@"Deals"
+                                                        rowLabels:@[@"On", @"Off"]
+                                                   yelpFilterName:@"deals_filter"
+                           yelpFilterValues:@[@"true", @""]]
+                          ,
+                          [[GroupCell alloc] initWithSectionLabel:@"Distance" rowLabels:@[@"Best Match", @"2 blocks", @"6 blocks", @"1 mile", @"5 miles"] yelpFilterName:@"radius_filter"
+                           yelpFilterValues:@[@"200", @"600", @"1600", @"8000"]
+                           ]
                           ];
 
         [self initCategories];
@@ -143,6 +150,7 @@ const NSInteger kCategorySection = 3;
 - (NSDictionary *) filters {
     NSMutableDictionary* filters = [NSMutableDictionary dictionary];
     
+    // Category section
     if (self.selectedCategories.count > 0) {
         NSMutableArray *names = [NSMutableArray array];
         for (NSDictionary *category in self.selectedCategories) {
@@ -151,6 +159,15 @@ const NSInteger kCategorySection = 3;
         NSString *categoryFilter = [names componentsJoinedByString:@","];
         [filters setObject:categoryFilter forKey:@"category_filter"];
     }
+    
+    // Other sections
+    for (GroupCell *section in self.sections) {
+        NSString *filterValue = section.filterValues[section.selectedIndex];
+        if (![filterValue isEqualToString:@""]) {
+            [filters setObject:filterValue forKey:section.yelpFilterName];
+        }
+    }
+    
     return filters;
 }
 

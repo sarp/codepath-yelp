@@ -16,8 +16,9 @@
 @property (nonatomic, assign) NSInteger selectedIndex;
 @property (nonatomic, strong) NSString *yelpFilterName;
 @property (nonatomic, assign, readonly) NSInteger numRows;
+@property (nonatomic, strong) NSArray *filterValues;
 
-- initWithSectionLabel:(NSString*)sectionLabel rowLabels:(NSArray*)rowLabels yelpFilterName:(NSString*)filterName;
+- initWithSectionLabel:(NSString*)sectionLabel rowLabels:(NSArray*)rowLabels yelpFilterName:(NSString*)filterName yelpFilterValues:(NSArray*) filterValues;
 - (NSString*)labelForRow:(NSInteger) row;
 - (BOOL) isRowOn:(NSInteger)row;
 
