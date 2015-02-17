@@ -21,11 +21,6 @@
     nvc.navigationBar.barTintColor = [UIColor colorWithRed:164.0f/255.0f green:0.0f blue:0.0f alpha:1.0f];
     nvc.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.window.rootViewController = nvc;
-
-    UISearchBar *searchBar = [[UISearchBar alloc] init];
-    searchBar.delegate = mvc;
-    mvc.navigationItem.titleView = searchBar;
-
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

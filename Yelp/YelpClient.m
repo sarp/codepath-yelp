@@ -20,16 +20,10 @@
     return self;
 }
 
-- (AFHTTPRequestOperation *)searchWithTerm:(NSString *)term params:(NSDictionary *)params success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
-    
+- (AFHTTPRequestOperation *)searchWithParams:(NSDictionary *)params success:(void (^)(AFHTTPRequestOperation *operation, id response))success failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure {
     // For additional parameters, see http://www.yelp.com/developers/documentation/v2/search_api
-    NSDictionary *defaults = @{@"term": term, @"ll" : @"37.774866,-122.394556"};
-    NSMutableDictionary *allParameters = [defaults mutableCopy];
-    if (params) {
-        [allParameters addEntriesFromDictionary:params];
-    }
-    
-    return [self GET:@"search" parameters:allParameters success:success failure:failure];
+    NSLog(@"Params: %@", params);
+    return [self GET:@"search" parameters:params success:success failure:failure];
 }
 
 @end

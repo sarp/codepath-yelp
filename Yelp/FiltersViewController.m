@@ -10,8 +10,6 @@
 #import "SwitchCell.h"
 #import "GroupCell.h"
 
-// TODO: Is there a shortcut for NSIndexSet
-
 @interface FiltersViewController () <UITableViewDataSource, UITableViewDelegate, SwitchCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

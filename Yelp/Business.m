@@ -10,8 +10,6 @@
 
 @implementation Business
 
-// TODO: Use shorthand if notation
-
 - (id) initWithDictionary:(NSDictionary*) dictionary {
     self = [super init];
     
@@ -27,16 +25,9 @@
         self.imageUrl = dictionary[@"image_url"];
         
         NSArray *addresses = [dictionary valueForKeyPath:@"location.address"];
-        NSString *street = @"";
-        if ([addresses count] > 0) {
-            street = addresses[0];
-        }
-
+        NSString *street = addresses.count > 0 ? addresses[0] : @"";
         NSArray *neighborhoods = [dictionary valueForKeyPath:@"location.neighborhoods"];
-        NSString *neighborhood = @"";
-        if ([neighborhoods count] > 0) {
-            neighborhood = neighborhoods[0];
-        }
+        NSString *neighborhood = neighborhoods.count > 0 ? neighborhoods[0] : @"";
         self.address = [NSString stringWithFormat:@"%@, %@", street, neighborhood];
         
         self.numReviews = [dictionary[@"review_count"] integerValue];

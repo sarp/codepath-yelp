@@ -22,8 +22,10 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic, strong) NSArray *businesses;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSDictionary *filterParams;
+@property (nonatomic, strong) UISearchBar *searchBar;
 
-- (void) fetchBusinessesWithQuery:(NSString *)query params:(NSDictionary *) params;
+- (void) fetchBusinessesWithParams:(NSDictionary *) params;
 
 @end
 
@@ -33,10 +35,14 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.searchBar = [[UISearchBar alloc] init];
+        self.searchBar.delegate = self;
+        self.navigationItem.titleView = self.searchBar;
+        
         // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         
-        [self fetchBusinessesWithQuery:@"Restaurants" params:nil];
+        [self fetchBusinessesWithParams:self.filterParams];
     }
     return self;
 }
@@ -45,7 +51,8 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
 
 - (void)filtersViewController:(FiltersViewController *)filtersViewController didChangeFilters:(NSDictionary *)filters {
     NSLog(@"Filters: %@", filters);
-    [self fetchBusinessesWithQuery:@"Restaurants" params:filters];
+    self.filterParams = filters;
+    [self fetchBusinessesWithParams:self.filterParams];
 }
 
 - (void)viewDidLoad
@@ -80,23 +87,48 @@ NSString * const kYelpTokenSecret = @"xQAmvDB3DqguX85wwIitZs_PfbU";
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Search bar methods
+
+- (void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [self.searchBar setShowsCancelButton:YES];
+}
+
+- (void) searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [self.searchBar setShowsCancelButton:NO];
+    [self fetchBusinessesWithParams:self.filterParams];
+}
+
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    NSLog(@"Search bar button clicked: %@", searchBar.text);
+    [searchBar endEditing:YES];
+}
+
+- (void) searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    searchBar.text = @"";
     [searchBar endEditing:YES];
 }
 
 #pragma mark - Private methods
 
-- (void) fetchBusinessesWithQuery:(NSString *)query params:(NSDictionary *)params {
+- (void) fetchBusinessesWithParams:(NSDictionary *)params {
+    NSDictionary *defaults = @{@"category_filter" : @"restaurants", @"ll" : @"37.774866,-122.394556"};
+    NSMutableDictionary *allParameters = [defaults mutableCopy];
+    if (params) {
+        [allParameters addEntriesFromDictionary:params];
+    }
+    if (![self.searchBar.text isEqualToString:@""]) {
+        allParameters[@"term"] = self.searchBar.text;
+    }
     
-    [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
-     NSLog(@"response: %@", response);
+    [self.client searchWithParams:allParameters success:^(AFHTTPRequestOperation *operation, id response) {
      NSArray *businessesDictionaries = response[@"businesses"];
      self.businesses = [Business businessesWithDictionaries:businessesDictionaries];
      
      [self.tableView reloadData];
      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-     NSLog(@"error: %@", [error description]);
      }];
 }
 
